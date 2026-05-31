@@ -112,9 +112,10 @@ export default function VideoDemo() {
     const token = (recordingTokenRef.current += 1)
 
     let audioTracks: MediaStreamTrack[] = []
-    if (typeof video.captureStream === 'function') {
+    const captureStream = (video as unknown as { captureStream?: () => MediaStream }).captureStream
+    if (typeof captureStream === 'function') {
       try {
-        const mediaStream = video.captureStream()
+        const mediaStream = captureStream.call(video)
         audioTracks = mediaStream.getAudioTracks()
       } catch {
         audioTracks = []
